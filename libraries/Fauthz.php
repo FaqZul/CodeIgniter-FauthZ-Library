@@ -5,7 +5,7 @@
  * @license		https://opensource.org/licenses/MIT 	MIT License
  * @link		https://github.com/FaqZul
  * @package		FaqZul/CodeIgniter-FauthZ-Library
- * @version		0.1.0
+ * @version		1.0.0-dev
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
