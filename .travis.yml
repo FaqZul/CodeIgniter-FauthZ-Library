@@ -1,0 +1,24 @@
+language: php
+php:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+addons:
+  mariadb: '10.2'
+dist: trusty
+env:
+  global:
+    - TRAVIS_DBHOST=127.0.0.1
+    - TRAVIS_DBUSER=root
+    - TRAVIS_DBNAME=fauthz
+if: tag IS blank
+before_install:
+  - mysql -e "CREATE DATABASE IF NOT EXISTS fauthz;" -u root
+  - mysql -u root fauthz < sql/mariadb.sql
+before_script:
+  - bash test/before_script.sh
+script:
+  - ../CodeIgniter/vendor/bin/phpunit --bootstrap test/Bootstrap.php --coverage-text test/FauthzTest.php
+after_script:
+  - rm -rf ../CodeIgniter

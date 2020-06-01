@@ -1,0 +1,24 @@
+{
+	"name": "faqzul/codeigniter-fauthz-library",
+	"description": "CodeIgniter Auth Library",
+	"keywords": [
+		"codeigniter",
+		"auth",
+		"fauthz",
+		"faqzul"
+	],
+	"homepage": "https://github.com/FaqZul/CodeIgniter-FauthZ-Library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Muhammad Faqih Zulfikar",
+			"email": "faqzul@gmail.com",
+			"homepage": "https://github.com/FaqZul",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.4.8",
+		"faqzul/codeigniter-crud-model": "~3.2.0"
+	}
+}
