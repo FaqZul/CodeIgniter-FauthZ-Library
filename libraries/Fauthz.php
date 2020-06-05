@@ -325,7 +325,7 @@ class Fauthz {
 		if (isset($old_pass, $new_pass)) {
 			if ( ! is_null($user = $this->user_get($this->get_user_id(), 'id', ['password'])) && $user->activated == 1) {
 				require_once 'phpass-0.5/PasswordHash.php';
-				$passhash = new PasswordHash($this->config('phpass_hash_strength'), $this->config('phpass_hash_portable'));;
+				$passhash = new PasswordHash($this->config('phpass_hash_strength'), $this->config('phpass_hash_portable'));
 				if ($passhash->CheckPassword($old_pass, $user->password))
 					return $this->CI->crud->updateData('fauthz', ['password' => $passhash->HashPassword($new_pass)], ['id' => $user->id]);
 				else
@@ -348,7 +348,7 @@ class Fauthz {
 		if (isset($new_email, $password) && is_string($new_email)) {
 			if ( ! is_null($user = $this->user_get($this->get_user_id(), 'id', ['password', "JSON_VALUE(info, '$.new_email') AS new_email", "JSON_VALUE(info, '$.new_email_key') AS new_email_key"])) && $user->activated == 1) {
 				require_once 'phpass-0.5/PasswordHash.php';
-				$passhash = new PasswordHash($this->config('phpass_hash_strength'), $this->config('phpass_hash_portable'));;
+				$passhash = new PasswordHash($this->config('phpass_hash_strength'), $this->config('phpass_hash_portable'));
 				if ($passhash->CheckPassword($password, $user->password)) {
 					$arr = ['new_email' => $new_email, 'username' => $user->username, 'user_id' => $user->id];
 					if ($user->email === $new_email) { $this->CE = ['email' => 'fauthz_current_email']; }
@@ -395,7 +395,7 @@ class Fauthz {
 		if (isset($password)) {
 			if ( ! is_null($user = $this->user_get($this->get_user_id(), 'id', ['password'])) && $user->activated == 1) {
 				require_once 'phpass-0.5/PasswordHash.php';
-				$passhash = new PasswordHash($this->config('phpass_hash_strength'), $this->config('phpass_hash_portable'));;
+				$passhash = new PasswordHash($this->config('phpass_hash_strength'), $this->config('phpass_hash_portable'));
 				if ($passhash->CheckPassword($password, $user->password)) {
 					if ($this->_user_del($user->id)) {
 						$this->logout();
