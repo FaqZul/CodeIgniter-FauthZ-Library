@@ -413,11 +413,12 @@ class Fauthz {
 	 * @param	string
 	 * @param	string
 	 * @param	array
+	 * @param	bool
 	 * @return	object
 	 */
-	public function user_get($val, $key = 'id', $ret = array()) {
+	public function user_get($val, $key = 'id', $ret = array(), $merge = TRUE) {
 		$get = ['id', 'username', 'email', 'activated'];
-		$var = implode(',', array_merge($get, $ret));
+		$var = implode(',', ($merge) ? array_merge($get, $ret): $ret);
 		$whr = [$key => $val];
 		if ($key === 'login')
 			$whr = ['or_where' => ['username' => $val, 'email' => $val]];
@@ -425,12 +426,55 @@ class Fauthz {
 		$sql = $this->CI->crud->readData($var, 'fauthz', $whr);
 		if ($sql->num_rows() === 1) {
 			$res = $sql->row();
-			$res->id = (int) $res->id;
+			if (isset($res->id))
+				$res->id = (int) $res->id;
 			$sql->free_result();
 			return $res;
 		}
 		$sql->free_result();
 		return NULL;
+	}
+
+	/**
+	 * Get info user.
+	 *
+	 * @param	mixed
+	 * @return	mixed
+	 */
+	public function info($var) {
+		$select = array();
+		if (is_string($var))
+			$select[] = "JSON_VALUE(info, '$.$var') AS $var";
+		else if (is_array($var))
+			foreach ($var as $vark => $varv)
+				$select[] = "JSON_VALUE(info, '$." . ((is_string($vark) ? $vark: $varv)) . "') AS $varv";
+		if ( ! is_null($user = $this->user_get($this->get_user_id(), 'id', $select, FALSE))) {
+			return (is_string($var)) ? $user->{$var}: $user;
+		}
+		return NULL;
+	}
+
+	/**
+	 * Set info user.
+	 *
+	 * @param	mixed
+	 * @param	mixed
+	 * @return	bool
+	 */
+	public function info_set($key, $val = NULL) {
+		$set = [];
+		if (is_array($key))
+			foreach ($key as $k => $v)
+				$set[] = "'$.$k', JSON_COMPACT('" . json_encode($v) . "')";
+		else if (is_string($key))
+			$set[] = "'$.$key', JSON_COMPACT('" . json_encode($val) . "')";
+		if (count($set) > 0) {
+			$this->__load_crud();
+			$this->CI->db->set('info', 'JSON_SET(info, ' . implode(', ', $set) . ')', FALSE);
+			$this->CI->db->where('id', $this->get_user_id());
+			return $this->CI->db->update('fauthz');
+		}
+		return FALSE;
 	}
 
 	/**
