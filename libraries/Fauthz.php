@@ -52,7 +52,7 @@ class Fauthz {
 					if ($user->banned == 1) { $this->CE = ['banned' => $user->bantxt]; }
 					else {
 						$this->__load_sess();
-						$this->CI->session->set_userdata(['status' => ($user->activated == 1) ? STATUS_ACTIVATED: STATUS_NOT_ACTIVATED, 'email' => $user->email, 'username' => $user->username, 'user_id' => $user->id]);
+						$this->CI->session->set_userdata(['fauthz' => ($user->activated == 1) ? STATUS_ACTIVATED: STATUS_NOT_ACTIVATED, 'email' => $user->email, 'username' => $user->username, 'user_id' => $user->id]);
 						if ($user->activated == 0) { $this->CE = ['not_activated' => '']; }
 						else {
 							if ($remember)
@@ -106,7 +106,7 @@ class Fauthz {
 	 */
 	public function is_logged_in($activated = TRUE) {
 		$this->__load_sess();
-		return $this->CI->session->userdata('status') === ($activated ? STATUS_ACTIVATED: STATUS_NOT_ACTIVATED);
+		return $this->CI->session->userdata('fauthz') === ($activated ? STATUS_ACTIVATED: STATUS_NOT_ACTIVATED);
 	}
 
 	/**
@@ -752,7 +752,7 @@ class Fauthz {
 					$ual = $this->CI->crud->readData('id, username', 'fauthz', ['id' => $data['user_id'], "JSON_SEARCH(info, 'one', '" . $data['key'] . "', '', '$.autologin[*].key') !=" => NULL])->row();
 					if (isset($ual)) {
 						$this->__load_sess();
-						$this->CI->session->set_userdata(['status' => STATUS_ACTIVATED, 'username' => $ual->username, 'user_id' => (int) $ual->id]);
+						$this->CI->session->set_userdata(['fauthz' => STATUS_ACTIVATED, 'username' => $ual->username, 'user_id' => (int) $ual->id]);
 						set_cookie(['name' => $this->config('autologin_cookie_name'), 'value' => $cookie, 'expire' => $this->config('autologin_cookie_life')]);
 						if ($this->config('log_login'))
 							$this->__log_inout($ual->id, session_id());
