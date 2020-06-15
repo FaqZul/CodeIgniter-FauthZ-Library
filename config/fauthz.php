@@ -134,3 +134,13 @@ $config['captcha_width'] = 200;
 |--------------------------------------------------------------------------
 */
 $config['crud_path'] = FCPATH . 'vendor/faqzul/codeigniter-crud-model/';
+
+/*
+|--------------------------------------------------------------------------
+| Session Prefix
+|
+| You can add an optional prefix,
+| which will be added to the session name.
+|--------------------------------------------------------------------------
+*/
+$config['sess_prefix'] = '';
